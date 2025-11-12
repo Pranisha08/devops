@@ -14,12 +14,17 @@ jobs:
       # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
+        
+     - name: List files for debugging
+        run: ls -R
+
 
       # Step 2: Set up Python
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+
 
       # Step 3: Install dependencies
       - name: Install dependencies
