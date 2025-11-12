@@ -1,0 +1,41 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run automated tests (simple health check)
+      - name: Run test
+        run: |
+          python -c "from app import app; client = app.test_client(); assert client.get('/').status_code == 200"
+
+      # Step 5: Build Docker image
+      - name: Build Docker image
+        run: docker build -t flask-cicd-demo .
+
+      # Step 6: Deploy to EC2 (optional – for assignment, describe conceptually)
+      - name: Deployment step
+        run: echo "In a real project, this step would SSH into EC2 and deploy the container"
